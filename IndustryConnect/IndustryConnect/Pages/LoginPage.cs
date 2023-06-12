@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using IndustryConnect.Utilities;
+using OpenQA.Selenium;
 
 namespace IndustryConnect.Pages
 {
@@ -10,7 +11,6 @@ namespace IndustryConnect.Pages
 
             //launch turn up portal
             driver.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
-            Thread.Sleep(1000);
 
             //identify username textbox and enter valid username
             IWebElement usernameTextbox = driver.FindElement(By.Id("UserName"));

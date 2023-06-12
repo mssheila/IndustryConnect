@@ -1,5 +1,6 @@
-﻿using OpenQA.Selenium;
-
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace IndustryConnect.Pages
 {
@@ -7,6 +8,13 @@ namespace IndustryConnect.Pages
     {
         public void CreateTM(IWebDriver driver)
         {
+            //below is implicit wait. Selenium will wait up to 7 secs for all "driver" variables. Will continue to next code if found the elements earlier.
+            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(7));
+
+            //below is explicit wait.
+            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(7));
+            //wait.Until(ExpectedConditions.ElementExists(By.Id(Id)));
+
             //click on create new button
             IWebElement createNewButton = driver.FindElement(By.XPath("//*[@id=\"container\"]/p/a"));
             createNewButton.Click();
@@ -44,16 +52,27 @@ namespace IndustryConnect.Pages
 
             IWebElement TestCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
             IWebElement TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
-            IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]"));
+            try
+            {
+                IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
+            }
+            catch(Exception e)
+            {
+                Assert.Fail("Cannot find price element", e.Message);
+            }
 
-            if (TestCode.Text == "Test code") //&& TestDescription.Text == "Test description" && TestPrice.Text == "12.00")
-            {
-                Console.WriteLine("save was successful");
-            }
-            else
-            {
-                Console.WriteLine("save UNSUCCESSFUL");
-            }
+            Assert.That(TestCode.Text == "Test codae", "Actual Result Code differs from Expected Result");
+            Assert.That(TestDescription.Text == "Test Description", "Actual Result Description differs from Expected Result");
+            //Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
+
+            //if (TestCode.Text == "Test code") //&& TestDescription.Text == "Test description" && TestPrice.Text == "12.00")
+            //{
+            //    Assert.Pass("save was successful");
+            //}
+            //else
+            //{
+            //    Assert.Fail("save UNSUCCESSFUL");
+            //}
         }
 
         public void EditTM(IWebDriver driver)
