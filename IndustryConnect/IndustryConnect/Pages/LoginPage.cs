@@ -3,9 +3,9 @@ using OpenQA.Selenium;
 
 namespace IndustryConnect.Pages
 {
-    public class LoginPage
+    public class LoginPage : CommonDrivers
     {
-        public void loginSteps(IWebDriver driver)
+        public void loginSteps()
         {
             driver.Manage().Window.Maximize();
 

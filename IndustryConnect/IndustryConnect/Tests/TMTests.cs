@@ -12,56 +12,51 @@ using OpenQA.Selenium.Chrome;
 namespace IndustryConnect.Tests
 {
     [TestFixture]
+    [Parallelizable]
     public class TMTests : CommonDrivers
     {
+        LoginPage loginPageObj = new LoginPage();
+        HomePage homePageObj = new HomePage();
+        //TM page object initialization and definition
+        TMPage tMPageObj = new TMPage();
+
         [SetUp]
         public void LoginActions()
         {
             driver = new ChromeDriver();
 
             //login page object initialization and definition
-            LoginPage loginPageObj = new LoginPage();
-            loginPageObj.loginSteps(driver);
+            loginPageObj.loginSteps();
 
             //home page object initialization and definition
-            HomePage homePageObj = new HomePage();
-            homePageObj.goToTMPage(driver);
+            homePageObj.goToTMPage();
         }
 
-        [Test]
+        [Test, Order(1), Description("This is to test TM creation")]
         public void CreateTM_Test()
         {
-            //TM page object initialization and definition
-            TMPage tMPageObj = new TMPage();
-
             //create records
-            tMPageObj.CreateTM(driver);
+            tMPageObj.CreateTM();
         }
 
-        [Test]
+        [Test, Order(2), Description("This is to test the edit function for TM")]
         public void EditTM_Test()
         {
-            //TM page object initialization and definition
-            TMPage tMPageObj = new TMPage();
-
             //edit records
-            tMPageObj.EditTM(driver);
+            tMPageObj.EditTM();
         }
 
-        [Test]
+        [Test, Order(3), Description("This is to test the delete function for TM")]
         public void DeleteTM_Test()
         {
-            //TM page object initialization and definition
-            TMPage tMPageObj = new TMPage();
-
             //delete records
-            tMPageObj.DeleteTM(driver);
+            tMPageObj.DeleteTM();
         }
 
         [TearDown]
         public void CloseTestRun()
         {
-
+            tMPageObj.QuitBrowser();
         }
 
 

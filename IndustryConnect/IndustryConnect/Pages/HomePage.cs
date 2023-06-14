@@ -3,9 +3,9 @@ using OpenQA.Selenium;
 
 namespace IndustryConnect.Pages
 {
-    public class HomePage
+    public class HomePage : CommonDrivers
     {
-        public void goToTMPage(IWebDriver driver)
+        public void goToTMPage()
         {
             //create new time record
             //navigate to time and material module
@@ -15,6 +15,11 @@ namespace IndustryConnect.Pages
 
             IWebElement TimeNmaterial = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/ul/li[3]/a"));
             TimeNmaterial.Click();
+        }
+
+        public void goToEmployeePage()
+        {
+            //code to go to employee page
         }
     }
 }

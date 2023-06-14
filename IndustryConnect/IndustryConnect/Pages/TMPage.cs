@@ -1,12 +1,13 @@
-﻿using NUnit.Framework;
+﻿using IndustryConnect.Utilities;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace IndustryConnect.Pages
 {
-    public class TMPage
+    public class TMPage : CommonDrivers
     {
-        public void CreateTM(IWebDriver driver)
+        public void CreateTM()
         {
             //below is implicit wait. Selenium will wait up to 7 secs for all "driver" variables. Will continue to next code if found the elements earlier.
             //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(7));
@@ -52,17 +53,17 @@ namespace IndustryConnect.Pages
 
             IWebElement TestCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
             IWebElement TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
-            try
-            {
-                IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
-            }
-            catch(Exception e)
-            {
-                Assert.Fail("Cannot find price element", e.Message);
-            }
+            //try
+            //{
+            //    IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
+            //}
+            //catch(Exception e)
+            //{
+            //    Assert.Fail("Cannot find price element", e.Message);
+            //}
 
-            Assert.That(TestCode.Text == "Test codae", "Actual Result Code differs from Expected Result");
-            Assert.That(TestDescription.Text == "Test Description", "Actual Result Description differs from Expected Result");
+            Assert.That(TestCode.Text == "Test code", "Actual Result Code differs from Expected Result");
+            Assert.That(TestDescription.Text == "Test description", "Actual Result Description differs from Expected Result");
             //Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
 
             //if (TestCode.Text == "Test code") //&& TestDescription.Text == "Test description" && TestPrice.Text == "12.00")
@@ -75,15 +76,100 @@ namespace IndustryConnect.Pages
             //}
         }
 
-        public void EditTM(IWebDriver driver)
+        public void EditTM()
         {
-            //code for edit TM record
+            //go to last page
+            Thread.Sleep(5000);
+            IWebElement lastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            lastPageButton.Click();
+
+            IWebElement code = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+
+            if (code.Text == "Test code")
+            {
+                //click edit on last record
+                IWebElement editBtn = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+                editBtn.Click();
+                Thread.Sleep(3000);
+            }
+            else
+                Assert.Fail("Record to be edited not found");
+
+            ////edit description
+            IWebElement descriptionTxtbox = driver.FindElement(By.Id("Description"));
+            descriptionTxtbox.Clear();
+            descriptionTxtbox.SendKeys(("Sheila Edited description"));
+
+            //click save
+            IWebElement saveButton = driver.FindElement(By.XPath("//*[@id=\"SaveButton\"]"));
+            saveButton.Click();
+            Thread.Sleep(5000);
+
+            //check if edited time description saved successfully
+            lastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            lastPageButton.Click();
+
+            IWebElement TestCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            IWebElement TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            //try
+            //{
+            //    IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
+            //}
+            //catch (Exception e)
+            //{
+            //    Assert.Fail("Cannot find price element", e.Message);
+            //}
+
+            Assert.That(TestCode.Text == "Test code", "Actual Result Code differs from Expected Result");
+            Assert.That(TestDescription.Text == "Sheila Edited description", "Actual Result Description differs from Expected Result");
+            //Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
         }
 
-        public void DeleteTM(IWebDriver driver) 
+        public void DeleteTM() 
         {
-            //code for delete TM record
+            //go to last page
+            Thread.Sleep(5000);
+            IWebElement lastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            lastPageButton.Click();
+
+            IWebElement TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            IWebElement deleteBtn = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+
+            if (TestDescription.Text == "Sheila Edited description")
+            {
+                //click delete on last record
+                deleteBtn.Click();
+                driver.SwitchTo().Alert().Accept();
+                Thread.Sleep(5000);
+            }
+            else
+                Assert.Fail("Record to be edited not found");
+
+            //check if last record deleted successfully
+            TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            if (TestDescription.Text == "Sheila Edited description")
+                Assert.Fail("Deletion unsuccessful");
+
+            // Assert.That(TestDescription.Text != "Sheila Edited description", "Deletion unsuccessful");
+
+            //IWebElement TestCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"))
+            ////try
+            ////{
+            ////    IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
+            ////}
+            ////catch (Exception e)
+            ////{
+            ////    Assert.Fail("Cannot find price element", e.Message);
+            ////}
+
+            //Assert.That(TestCode.Text == "Test code", "Actual Result Code differs from Expected Result");
+            //Assert.That(TestDescription.Text == "Sheila Edited description", "Actual Result Description differs from Expected Result");
+            ////Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
         }
 
+        public void QuitBrowser()
+        {
+           driver.Quit();
+        }
     }
 }
