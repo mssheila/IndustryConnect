@@ -5,9 +5,9 @@ using OpenQA.Selenium.Support.UI;
 
 namespace IndustryConnect.Pages
 {
-    public class TMPage : CommonDrivers
+    public class TMPage
     {
-        public void CreateTM()
+        public void CreateTM(IWebDriver driver)
         {
             //below is implicit wait. Selenium will wait up to 7 secs for all "driver" variables. Will continue to next code if found the elements earlier.
             //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(7));
@@ -50,20 +50,21 @@ namespace IndustryConnect.Pages
             //check if new time record has been created successfully
             IWebElement lastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
             lastPageButton.Click();
+            Thread.Sleep(1000);
 
-            IWebElement TestCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-            IWebElement TestDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            
+            
             //try
             //{
-            //    IWebElement TestPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[2]/td[last()]/td[4]"));
+            
             //}
             //catch(Exception e)
             //{
             //    Assert.Fail("Cannot find price element", e.Message);
             //}
 
-            Assert.That(TestCode.Text == "Test code", "Actual Result Code differs from Expected Result");
-            Assert.That(TestDescription.Text == "Test description", "Actual Result Description differs from Expected Result");
+            //Assert.That(TestCode.Text == "Test code", "Actual Result Code differs from Expected Result");
+            //Assert.That(TestDescription.Text == "Test description", "Actual Result Description differs from Expected Result");
             //Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
 
             //if (TestCode.Text == "Test code") //&& TestDescription.Text == "Test description" && TestPrice.Text == "12.00")
@@ -76,7 +77,25 @@ namespace IndustryConnect.Pages
             //}
         }
 
-        public void EditTM()
+        public string GetCode(IWebDriver driver)
+        {
+            IWebElement actualCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            return actualCode.Text;
+        }
+
+        public string GetDescription(IWebDriver driver)
+        {
+            IWebElement actualDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+            return actualDescription.Text;
+        }
+
+        public string GetPrice(IWebDriver driver)
+        {
+            IWebElement actualPrice = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[4]"));
+            return actualPrice.Text;
+        }
+
+        public void EditTM(IWebDriver driver, string description)
         {
             //go to last page
             Thread.Sleep(5000);
@@ -98,7 +117,7 @@ namespace IndustryConnect.Pages
             ////edit description
             IWebElement descriptionTxtbox = driver.FindElement(By.Id("Description"));
             descriptionTxtbox.Clear();
-            descriptionTxtbox.SendKeys(("Sheila Edited description"));
+            descriptionTxtbox.SendKeys(description);
 
             //click save
             IWebElement saveButton = driver.FindElement(By.XPath("//*[@id=\"SaveButton\"]"));
@@ -125,7 +144,7 @@ namespace IndustryConnect.Pages
             //Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
         }
 
-        public void DeleteTM() 
+        public void DeleteTM(IWebDriver driver) 
         {
             //go to last page
             Thread.Sleep(5000);
@@ -167,7 +186,7 @@ namespace IndustryConnect.Pages
             ////Assert.That(TestPrice.Text == "$12.00", "Actual Result Price differs from Expected Result");
         }
 
-        public void QuitBrowser()
+        public void QuitBrowser(IWebDriver driver)
         {
            driver.Quit();
         }

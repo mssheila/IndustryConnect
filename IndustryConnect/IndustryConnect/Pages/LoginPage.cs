@@ -1,12 +1,15 @@
 ﻿using IndustryConnect.Utilities;
+using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 
 namespace IndustryConnect.Pages
 {
-    public class LoginPage : CommonDrivers
+    public class LoginPage 
     {
-        public void loginSteps()
+        public void loginSteps(IWebDriver driver)
         {
+            driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
 
             //launch turn up portal

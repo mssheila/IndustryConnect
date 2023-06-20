@@ -1,38 +1,21 @@
 ﻿using IndustryConnect.Pages;
 using IndustryConnect.Utilities;
 using NUnit.Framework;
-using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IndustryConnect.Tests
 {
     [TestFixture]
-    [Parallelizable]
+    //[Parallelizable]
     public class EmployeeTests : CommonDrivers
     {
-        LoginPage loginPageObj = new LoginPage();
         HomePage homePageObj = new HomePage();
         EmployeePage employeePageObj = new EmployeePage();
 
-        [SetUp]
-        public void LoginActions()
-        {
-            driver = new ChromeDriver();
-
-            //login page object initialization and definition
-            loginPageObj.loginSteps();
-
-            //home page object initialization and definition
-            homePageObj.goToEmployeePage();
-        }
-
+        
         [Test, Order(1), Description("Create Employees Test")]
         public void CreateEmployeeTest()
         {
+            homePageObj.goToEmployeePage();
             employeePageObj.CreateEmployee();
         }
 
@@ -40,19 +23,16 @@ namespace IndustryConnect.Tests
 
         public void EditEmployeeTest()
         {
+            homePageObj.goToEmployeePage();
             employeePageObj.EditEmployee();
         }
 
         [Test, Order(3), Description("Delete Employees Test")]
         public void DeleteEmployeeTest()
         {
+            homePageObj.goToEmployeePage();
             employeePageObj.DeleteEmployee();
         }
 
-        [TearDown]
-        public void ClosingStep()
-        {
-            driver.Quit();
-        }
     }
 }
