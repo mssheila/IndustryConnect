@@ -4,6 +4,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 using System;
 using TechTalk.SpecFlow;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace IndustryConnect.StepDefinitions
 {
@@ -52,18 +53,26 @@ namespace IndustryConnect.StepDefinitions
             Assert.That(newPrice == "$12.00", "Actual Result Price differs from Expected Result");
         }
 
-        [When(@"I update '([^']*)' edit an existing time and material record")]
-        public void WhenIUpdateEditAnExistingTimeAndMaterialRecord(string description)
+        [When(@"I update '([^']*)', '([^']*)' and '([^']*)' and edit an existing time and material record")]
+        public void WhenIUpdateAndAndEditAnExistingTimeAndMaterialRecord(string description, string code, string price)
         {
             TMPage tMPageObj = new TMPage();
-            tMPageObj.EditTM(driver, description);
+            tMPageObj.EditTM(driver, description, code, price);
         }
 
-        [Then(@"The record should have the updated '([^']*)'")]
-        public void ThenTheRecordShouldHaveTheUpdated(string description)
+        [Then(@"The record should have the updated '([^']*)', '([^']*)' and '([^']*)'")]
+        public void ThenTheRecordShouldHaveTheUpdatedAnd(string description, string code, string price)
         {
-            
+            TMPage tMPageObj = new TMPage();
+            string editedDescription = tMPageObj.GetEditedDescription(driver);
+            string editedCode = tMPageObj.GetEditedCode(driver);
+            string editedPrice = tMPageObj.GetEditedPrice(driver);
+
+            Assert.That(editedDescription == description, "Actual description and expected description do not match");
+            Assert.That(editedCode == code, "Actual code and expected code do not match");
+            Assert.That(editedPrice == price, "Actual price and expected price do not match");
         }
+
 
     }
 }
