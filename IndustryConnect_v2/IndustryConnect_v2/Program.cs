@@ -99,3 +99,39 @@ else
 {
     Console.WriteLine("No new record created");
 }
+
+//edit an existing record
+
+//click on edit button
+IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[7]/td[last()]/a[1]"));
+editButton.Click();
+Thread.Sleep(3000);
+
+//edit description
+IWebElement desTextBoxEdit = driverName.FindElement(By.Id("Description"));
+desTextBoxEdit.Clear();
+desTextBoxEdit.SendKeys("Sheila Description Edited");
+
+//save
+IWebElement saveButtonEdit = driverName.FindElement(By.Id("SaveButton"));
+saveButtonEdit.Click();
+Thread.Sleep(3000);
+
+//verify that record was successfully edited
+IWebElement lastPageBtnEdit = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+lastPageBtnEdit.Click();
+
+IWebElement newDescription = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+
+if (newDescription.Text == "Sheila Description Edited")
+{
+    Console.WriteLine("New record successfully UPDATED");
+}
+else
+{
+    Console.WriteLine("Record NOT updated");
+}
+
+//Deleting an existing record
+
+//click on delete button
