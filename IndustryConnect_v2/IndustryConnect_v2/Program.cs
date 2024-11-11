@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium; // telling VS that we are using Selenium here
 using OpenQA.Selenium.Chrome; // telling VS that we are using Selenium chrome driver
 
+
 // open chrome browser
 
 IWebDriver driverName = new ChromeDriver();
@@ -103,7 +104,7 @@ else
 //edit an existing record
 
 //click on edit button
-IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[7]/td[last()]/a[1]"));
+IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
 editButton.Click();
 Thread.Sleep(3000);
 
@@ -133,5 +134,29 @@ else
 }
 
 //Deleting an existing record
+Thread.Sleep(3000);
 
 //click on delete button
+IWebElement deleteButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+deleteButton.Click();
+
+//click ok on alert
+IAlert deleteAlert = driverName.SwitchTo().Alert();
+deleteAlert.Accept();
+
+Thread.Sleep(3000);
+
+//verify that record was successfully deleted
+IWebElement lastPageBtnDelete = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+lastPageBtnDelete.Click();
+
+IWebElement delDescription = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+
+if (delDescription.Text == "Sheila Description Edited")
+{
+    Console.WriteLine("Record is still there");
+}
+else
+{
+    Console.WriteLine("Record successfully DELETED");
+}
