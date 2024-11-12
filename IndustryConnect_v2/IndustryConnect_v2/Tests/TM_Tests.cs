@@ -1,16 +1,34 @@
-﻿using OpenQA.Selenium; // telling VS that we are using Selenium here
+﻿using IndustryConnect_v2.Pages;
+using OpenQA.Selenium; // telling VS that we are using Selenium here
 using OpenQA.Selenium.Chrome; // telling VS that we are using Selenium chrome driver
 
 
 // open chrome browser
 
 IWebDriver driverName = new ChromeDriver();
-//IWebDriver is a driver
-//driverName is the name of the browser
-//I am essentially telling here that my instance of webDriver is a chrome driver
 driverName.Manage().Window.Maximize();
 
-// launch turn up portal
+//LoginPage initialisation and definition
+LoginPage loginPageObj = new LoginPage();
+loginPageObj.LoginSteps(driverName);
+
+//HomePage initialisation and definition
+HomePage homePageObj = new HomePage();
+homePageObj.GoToTMPage(driverName);
+
+//TMPage object initialisation and definition
+TMpage tmPageObj = new TMpage();
+
+//Create new time and material records
+tmPageObj.CreateTM(driverName);
+
+//edit time and material records
+tmPageObj.EditTM(driverName);
+
+//delete time and material records
+tmPageObj.DeleteTM(driverName);
+
+/*// launch turn up portal
 
 driverName.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
 Thread.Sleep(1000);
@@ -37,26 +55,25 @@ Thread.Sleep(2000);
 IWebElement helloHari = driverName.FindElement(By.XPath("//*[@id=\"logoutForm\"]/ul/li/a"));
 
 if (helloHari.Text == "Hello hari!")
-    //helloHari.Text is asking to read only the text of the element
+//helloHari.Text is asking to read only the text of the element
 {
-    Console.WriteLine("User has logged in successfully");
+Console.WriteLine("User has logged in successfully");
 }
 else
 {
-    Console.WriteLine("User login failed");
-}
+Console.WriteLine("User login failed");
+}*/
 
-//create new time record
-
+/*//create new time record
 
 //navigate to time and material
 IWebElement adminButton = driverName.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/a"));
 adminButton.Click();
 
 IWebElement tmButton = driverName.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/ul/li[3]/a"));
-tmButton.Click();
+tmButton.Click();*/
 
-//click on create new button
+/*//click on create new button
 IWebElement createNewButton = driverName.FindElement(By.XPath("//*[@id=\"container\"]/p/a"));
 createNewButton.Click();
 
@@ -99,11 +116,11 @@ if (newCode.Text == "Sheila1")
 else
 {
     Console.WriteLine("No new record created");
-}
+}*/
 
 //edit an existing record
 
-//click on edit button
+/*//click on edit button
 IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
 editButton.Click();
 Thread.Sleep(3000);
@@ -131,9 +148,9 @@ if (newDescription.Text == "Sheila Description Edited")
 else
 {
     Console.WriteLine("Record NOT updated");
-}
+}*/
 
-//Deleting an existing record
+/*//Deleting an existing record
 Thread.Sleep(3000);
 
 //click on delete button
@@ -159,4 +176,4 @@ if (delDescription.Text == "Sheila Description Edited")
 else
 {
     Console.WriteLine("Record successfully DELETED");
-}
+}*/
