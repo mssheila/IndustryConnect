@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using IndustryConnect_v2.Utilities;
+using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace IndustryConnect_v2.Pages
 {
@@ -34,7 +36,7 @@ namespace IndustryConnect_v2.Pages
             //click on save button
             IWebElement saveButton = driverName.FindElement(By.Id("SaveButton"));
             saveButton.Click();
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
 
             //check if new time record has been created successfully
             IWebElement lastPageBtn = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
@@ -42,13 +44,15 @@ namespace IndustryConnect_v2.Pages
 
             IWebElement newCode = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
+            //Assert.That(newCode.Text == "Sheila1", "No new record created");
+
             if (newCode.Text == "Sheila1")
             {
-                Console.WriteLine("New record successfully created");
+                Assert.Pass("New record successfully created");
             }
             else
             {
-                Console.WriteLine("No new record created");
+                Assert.Fail("No new record created");
             }
         }
 
@@ -57,7 +61,7 @@ namespace IndustryConnect_v2.Pages
             //click on edit button
             IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
             editButton.Click();
-            Thread.Sleep(3000);
+            Wait.WaitForElement(driverName, "Id", "Description", 10);
 
             //edit description
             IWebElement desTextBoxEdit = driverName.FindElement(By.Id("Description"));
@@ -68,10 +72,13 @@ namespace IndustryConnect_v2.Pages
             IWebElement saveButtonEdit = driverName.FindElement(By.Id("SaveButton"));
             saveButtonEdit.Click();
             Thread.Sleep(3000);
+            //Wait.WaitForElement(driverName, "XPath", "//*[@id=\"tmsGrid\"]/div[4]/a[4]/span", 10);
 
             //verify that record was successfully edited
             IWebElement lastPageBtnEdit = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
             lastPageBtnEdit.Click();
+
+            //Thread.Sleep(3000);
 
             IWebElement newDescription = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
 

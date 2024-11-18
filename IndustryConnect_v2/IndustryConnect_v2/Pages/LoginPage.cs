@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using IndustryConnect_v2.Utilities;
+using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace IndustryConnect_v2.Pages
 {
@@ -9,7 +11,7 @@ namespace IndustryConnect_v2.Pages
             // launch turn up portal
 
             driverName.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
-            Thread.Sleep(1000);
+            Wait.WaitToBeVisible(driverName, "Id", "UserName", 10);
 
             // identify username textbox and enter valid username
 
@@ -27,7 +29,7 @@ namespace IndustryConnect_v2.Pages
             // identify login button and click on it
             IWebElement loginButton = driverName.FindElement(By.XPath("//*[@id=\"loginForm\"]/form/div[3]/input[1]"));
             loginButton.Click();
-            Thread.Sleep(2000);
+            Wait.WaitForElement(driverName, "XPath", "//*[@id=\"logoutForm\"]/ul/li/a", 10);
 
             // check if user has logged in successfully
             IWebElement helloHari = driverName.FindElement(By.XPath("//*[@id=\"logoutForm\"]/ul/li/a"));
@@ -40,6 +42,22 @@ namespace IndustryConnect_v2.Pages
             else
             {
                 Console.WriteLine("User login failed");
+            }
+
+            try
+            {
+                // identify username textbox and enter valid username
+
+                IWebElement usernameTextbox = driverName.FindElement(By.Id("UserName"));
+                //IWebElement is basically telling selenium I am adding an element
+                //driveName.FindElement is asking the browser to find an element for me
+
+                usernameTextbox.SendKeys("hari");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(
+                    "Portal did not load successfully", ex.Message);
             }
         }
     }
