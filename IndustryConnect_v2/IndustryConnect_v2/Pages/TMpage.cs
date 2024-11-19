@@ -4,9 +4,9 @@ using OpenQA.Selenium;
 
 namespace IndustryConnect_v2.Pages
 {
-    public class TMpage
+    public class TMpage : CommonDrivers
     {
-        public void CreateTM(IWebDriver driverName)
+        public void CreateTM()
         {
             //click on create new button
             IWebElement createNewButton = driverName.FindElement(By.XPath("//*[@id=\"container\"]/p/a"));
@@ -56,29 +56,40 @@ namespace IndustryConnect_v2.Pages
             }
         }
 
-        public void EditTM(IWebDriver driverName)
+        public void EditTM()
         {
-            //click on edit button
-            IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
-            editButton.Click();
-            Wait.WaitForElement(driverName, "Id", "Description", 10);
-
-            //edit description
-            IWebElement desTextBoxEdit = driverName.FindElement(By.Id("Description"));
-            desTextBoxEdit.Clear();
-            desTextBoxEdit.SendKeys("Sheila Description Edited");
-
-            //save
-            IWebElement saveButtonEdit = driverName.FindElement(By.Id("SaveButton"));
-            saveButtonEdit.Click();
             Thread.Sleep(3000);
-            //Wait.WaitForElement(driverName, "XPath", "//*[@id=\"tmsGrid\"]/div[4]/a[4]/span", 10);
 
-            //verify that record was successfully edited
-            IWebElement lastPageBtnEdit = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
-            lastPageBtnEdit.Click();
+            //go to the last page
+            IWebElement lastPageBtn = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            lastPageBtn.Click();
 
-            //Thread.Sleep(3000);
+            IWebElement code = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            if(code.Text == "Sheila1")
+            {
+                //click on edit button
+                IWebElement editButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+                editButton.Click();
+                Wait.WaitForElement(driverName, "Id", "Description", 10);
+
+                //edit description
+                IWebElement desTextBoxEdit = driverName.FindElement(By.Id("Description"));
+                desTextBoxEdit.Clear();
+                desTextBoxEdit.SendKeys("Sheila Description Edited");
+
+                //save
+                IWebElement saveButtonEdit = driverName.FindElement(By.Id("SaveButton"));
+                saveButtonEdit.Click();
+                Thread.Sleep(3000);
+
+                //verify that record was successfully edited
+                IWebElement lastPageBtnEdit = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+                lastPageBtnEdit.Click();
+            }
+            else
+            {
+                Assert.Fail("Record recently created not found");
+            }
 
             IWebElement newDescription = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
 
@@ -93,17 +104,31 @@ namespace IndustryConnect_v2.Pages
 
         }
 
-        public void DeleteTM(IWebDriver driverName)
+        public void DeleteTM()
         {
             Thread.Sleep(3000);
 
-            //click on delete button
-            IWebElement deleteButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
-            deleteButton.Click();
+            //go to the last page
+            IWebElement lastPageBtn = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            lastPageBtn.Click();
 
-            //click ok on alert
-            IAlert deleteAlert = driverName.SwitchTo().Alert();
-            deleteAlert.Accept();
+            IWebElement code = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            IWebElement description = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
+
+            if (code.Text == "Sheila1" && description.Text == "Sheila Description Edited")
+            {
+                //click on delete button
+                IWebElement deleteButton = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+                deleteButton.Click();
+
+                //click ok on alert
+                IAlert deleteAlert = driverName.SwitchTo().Alert();
+                deleteAlert.Accept();
+            }
+            else
+            {
+                Assert.Fail("Latest record to delete not found");
+            }
 
             Thread.Sleep(3000);
 
@@ -113,14 +138,16 @@ namespace IndustryConnect_v2.Pages
 
             IWebElement delDescription = driverName.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
 
-            if (delDescription.Text == "Sheila Description Edited")
+            Assert.That(delDescription.Text != "Sheila Description Edited", "Record is still there");
+
+            /*if (delDescription.Text == "Sheila Description Edited")
             {
                 Console.WriteLine("Record is still there");
             }
             else
             {
                 Console.WriteLine("Record successfully DELETED");
-            }
+            }*/
         }
     }
 }

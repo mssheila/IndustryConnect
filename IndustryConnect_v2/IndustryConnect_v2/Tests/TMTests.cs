@@ -8,58 +8,60 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using IndustryConnect_v2.Utilities;
+using OpenQA.Selenium.DevTools.V128.ServiceWorker;
 
 namespace IndustryConnect_v2.Tests
 {
     [TestFixture]
+    [Parallelizable]
     public class TMTests : CommonDrivers
     {
+        //LoginPage initialisation and definition
+        LoginPage loginPageObj = new LoginPage();
+
+        //HomePage initialisation and definition
+        HomePage homePageObj = new HomePage();
+
+        //TMPage initialisation and definition
+        TMpage tmPageObj = new TMpage();
+
         [SetUp]
         public void LoginActions()
         {
             driverName = new ChromeDriver();
             driverName.Manage().Window.Maximize();
 
-            //LoginPage initialisation and definition
-            LoginPage loginPageObj = new LoginPage();
             loginPageObj.LoginSteps(driverName);
 
-            //HomePage initialisation and definition
-            HomePage homePageObj = new HomePage();
             homePageObj.GoToTMPage(driverName);
         }
 
-        [Test]
+        [Test, Order(1), Description ("This is testing if a user is able to create a new record")]
         public void CreateTM_Test()
         {
-            //TMPage object initialisation and definition
-            TMpage tmPageObj = new TMpage();
             //Create new time and material records
-            tmPageObj.CreateTM(driverName);
+            tmPageObj.CreateTM();
         }
 
-        [Test]
+        [Test, Order(2), Description("This is testing if a user is able to edit the latest record created")]
         public void EditTM_Test()
         {
-            //TMPage object initialisation and definition
-            TMpage tmPageObj = new TMpage();
             //edit time and material records
-            tmPageObj.EditTM(driverName);
+            tmPageObj.EditTM();
         }
 
-        [Test]
+        [Test, Order(3), Description("This is testing if a user is able to delete the latest record edited")]
         public void DeleteTM_Test()
         {
-            //TMPage object initialisation and definition
-            TMpage tmPageObj = new TMpage();
             //delete time and material records
-            tmPageObj.DeleteTM(driverName);
+            tmPageObj.DeleteTM();
         }
 
         [TearDown]
         public void CloseTestRun()
         {
-
+            //this will close everything
+            driverName.Quit();
         }        
         
     }

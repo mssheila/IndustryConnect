@@ -44,21 +44,6 @@ namespace IndustryConnect_v2.Pages
                 Console.WriteLine("User login failed");
             }
 
-            try
-            {
-                // identify username textbox and enter valid username
-
-                IWebElement usernameTextbox = driverName.FindElement(By.Id("UserName"));
-                //IWebElement is basically telling selenium I am adding an element
-                //driveName.FindElement is asking the browser to find an element for me
-
-                usernameTextbox.SendKeys("hari");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(
-                    "Portal did not load successfully", ex.Message);
-            }
         }
     }
 }
